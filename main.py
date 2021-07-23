@@ -1,15 +1,17 @@
 # This is a simple version of a program to spy your salary from work.
 # Hope you will like it and use it.
 # Try to focus on your hour work day.
-# Calculate your outcom by attaching price / hour and taxes.
+# Calculate your payouts by attaching price / hour and taxes.
 from json import loads, dump
 from datetime import date, datetime, timedelta
+
+
 try:
     with open('data.json') as data:
         hours = loads(data)
 except FileNotFoundError:
     print('None file found....\nPlease fill all data to proceed.')
-    print('-'*48)
+    print('-' * 48)
     first_name, last_name = input("What's your full name? ").split(' ')
 
 # Create space (list) for data that user will fill, and then add it to new file
