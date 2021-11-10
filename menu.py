@@ -8,7 +8,7 @@ class Repositories:
     def __init__(self):
         newData = []
 
-    def is_User(self,first_name, last_name):
+    def isUser(self,first_name, last_name):
         id = 0
         with open('example.csv','r',encoding='utf-8') as checkFile:
             checkUserList = reader(checkFile,declimiter=',')
@@ -19,24 +19,13 @@ class Repositories:
 
         return id
 
+    def addUser(self, first_name: str, last_name: str):
+        if isUser():
+            pass
+
+
 
 #-----------------------------------------------actions.py-------------------------------------------------------------
-class Add:
-    def __str__(self):
-        return 'Add'
-
-
-
-class Delete:
-    def __str__(self):
-        return 'Delete'
-
-
-class Statement:
-    def __str__(self):
-        return 'Show'
-
-#--------------------------------------------Menu.py-------------------------------------------------------------------
 class AbstractMenu(ABC):
     def __init__(self):
         self.options ={}
@@ -45,10 +34,37 @@ class AbstractMenu(ABC):
     def __str__(self):
         pass
 
+class Add(AbstractMenu):
+    def __str__(self):
+        return 'Add'
 
+    def use(self):
+        first_name = input('Write your first name: ')
+        last_name = input('Write your last name: ')
+        user = Repositories()
+        if user.isUser(first_name, last_name):
+            user.addUser()
+
+
+class Delete(AbstractMenu):
+    def __str__(self):
+        return 'Delete'
+
+    def use(self):
+        pass
+
+
+class Statement(AbstractMenu):
+    def __str__(self):
+        return 'Show'
+
+    def use(self):
+        pass
+
+#--------------------------------------------Menu.py-------------------------------------------------------------------
 class People(AbstractMenu):
     def __init__(self):
-        super().__init__()
+        # super().__init__()
         self.options = {
             1: Add,
             2: Delete,
@@ -62,7 +78,7 @@ class People(AbstractMenu):
 
 class Income(AbstractMenu):
     def __init__(self):
-        super().__init__()
+        # super().__init__()
         self.options = {
             1: Add,
             2: Delete,
@@ -76,11 +92,16 @@ class Income(AbstractMenu):
 
 #---------------------------------------------------Exit.py------------------------------------------------------------
 class Exit(AbstractMenu):
+    # def __init__(self):
+    #     super().__init__()
+    #     self.options = {
+    #         0: self.use()
+    #     }
+
     def __str__(self):
         return 'Exit'
 
     def use(self):
-        super().use()
         print('Are you shure?[y/n]')
         confirm = input()
         if confirm.lower() == 'y':
@@ -90,12 +111,13 @@ class Exit(AbstractMenu):
 
         else:
             print('Good choice.')
+            return Start
 
 
 #----------------------------------------------Mainmenu.py-------------------------------------------------------------
 class Start(AbstractMenu):
     def __init__(self):
-        super().__init__()
+        # super().__init__()
         self.options = {
             1: People,
             2: Income,
@@ -117,10 +139,25 @@ class MainMenu:
         for shortcut, option in self.options.items():
             print(f'[{shortcut}] - {option()}')
 
-    def setMenu(self):
+    def isInOption(self,value):
+        return value in self.options
+
+    def findEmpty(self,optionMenu):
+        return len(optionMenu) != 0
+
+    def askUser(self):
         deep = int(input('Choose option: '))
-        choice = self.options[deep]()
-        return self.add_options(choice.options)
+        while not self.isInOption(deep):
+            print(f'{deep} does not exists...\n    Try again.')
+            deep = int(input('Choose option: '))
+        return self.options[deep]()
+
+    def setMenu(self):
+        choice = self.askUser()
+        if self.findEmpty(choice.options):
+            return self.add_options(choice.options)
+        return choice.use()
+
 
 
 #-----------------------------------------------------Application.py---------------------------------------------------
