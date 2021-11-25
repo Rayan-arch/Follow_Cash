@@ -1,4 +1,5 @@
 from views.menu import MainMenu
+from controllers.repositories import UserRepository
 
 
 class Application:
@@ -7,6 +8,3 @@ class Application:
         while True:
             menu.draw()
             menu.setMenu()
-
-    def EntryRepository(self):
-        return

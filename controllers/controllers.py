@@ -1,31 +1,38 @@
-from views.menu import AbstractMenu
-from controllers.repositories import Repositories
+from views.AbstracMenus import AbstractMenu, AbstractInteraction
+from controllers.repositories import UserRepository
 
-class Add(AbstractMenu):
+class Add(AbstractInteraction):
     def __str__(self):
         return 'Add'
 
     def use(self):
-        first_name = input('Write your first name: ')
-        last_name = input('Write your last name: ')
-        user = Repositories()
-        if user.isUser(first_name, last_name):
+        first_name = input('Write your first name: ').lower()
+        last_name = input('Write your last name: ').lower()
+        user = UserRepository()
+
+        if user.find(first_name, last_name) == 0:
             user.addUser(first_name, last_name)
+        else:
+            print('User already exists.')
 
-        return user.insertWorkday()
+        # return user.insertWorkday()
 
 
-class Delete(AbstractMenu):
+class Delete(AbstractInteraction):
     def __str__(self):
         return 'Delete'
 
     def use(self):
-        pass
+        first_name = input('Write your first name: ').lower()
+        last_name = input('Write your last name: ').lower()
+        user = UserRepository()
+        user.deleteUser(first_name, last_name)
 
 
-class Statement(AbstractMenu):
+class Statement(AbstractInteraction):
     def __str__(self):
         return 'Show'
 
     def use(self):
-        pass
+        allUsers = UserRepository()
+        allUsers.showUsers()
